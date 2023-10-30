@@ -1,0 +1,63 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - kodder/**
+
+permissions:
+  contents: write
+
+permissions:
+  contents: write
+
+jobs:
+  compile:
+    name: dart compile exe
+    strategy:
+      matrix:
+        include:
+          - runs-on: ubuntu-latest
+            binary-name: kodder_linux_amd64
+          - runs-on: macos-latest
+            binary-name: kodder_macos_amd64
+          - runs-on: windows-latest
+            binary-name: kodder_windows.exe
+    runs-on: ${{ matrix.runs-on }}
+    defaults:
+      run:
+        working-directory: ./kodder
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1
+      - run: dart pub get
+      - run: mkdir ${{ matrix.runs-on }}
+      - run: dart compile exe bin/kodder.dart -o ${{ matrix.runs-on }}/${{ matrix.binary-name }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: bin-${{ matrix.runs-on }}
+          path: ./kodder/${{ matrix.runs-on }}/${{ matrix.binary-name }}
+
+  release:
+    needs: compile
+    name: github release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: bin-ubuntu-latest
+          path: bin-linux
+      - uses: actions/download-artifact@v3
+        with:
+          name: bin-macos-latest
+          path: bin-macos
+      - uses: actions/download-artifact@v3
+        with:
+          name: bin-windows-latest
+          path: bin-windows
+      - uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          files: bin-*/*
