@@ -40,9 +40,18 @@ Future<void> main(List<String> arguments) async {
       .where((element) => element.path.endsWith('.dart'))
       .map((e) => e.path)
       .toList();
+
+  final dartSdk = Platform.environment['DART_SDK'];
+  if (dartSdk == null) {
+    print('DART_SDK environment variable is not set');
+    exit(69);
+  }
+
   final session = AnalysisContextCollection(
-      includedPaths: filesInProjectDir,
-      resourceProvider: PhysicalResourceProvider.INSTANCE);
+    includedPaths: filesInProjectDir,
+    resourceProvider: PhysicalResourceProvider.INSTANCE,
+    sdkPath: dartSdk!,
+  );
   List<FileLowLevelData> filesLowLevelData = [];
   for (final file in filesInProjectDir) {
     final element = session.contexts.first.currentSession.getParsedUnit(file)
