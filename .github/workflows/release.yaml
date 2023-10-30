@@ -4,11 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - kodder/**
-
-permissions:
-  contents: write
 
 permissions:
   contents: write
@@ -20,25 +15,22 @@ jobs:
       matrix:
         include:
           - runs-on: ubuntu-latest
-            binary-name: kodder_linux_amd64
+            binary-name: flukki_linux_amd64
           - runs-on: macos-latest
-            binary-name: kodder_macos_amd64
+            binary-name: flukki_macos_amd64
           - runs-on: windows-latest
-            binary-name: kodder_windows.exe
+            binary-name: flukki_windows.exe
     runs-on: ${{ matrix.runs-on }}
-    defaults:
-      run:
-        working-directory: ./kodder
     steps:
       - uses: actions/checkout@v2
       - uses: dart-lang/setup-dart@v1
       - run: dart pub get
       - run: mkdir ${{ matrix.runs-on }}
-      - run: dart compile exe bin/kodder.dart -o ${{ matrix.runs-on }}/${{ matrix.binary-name }}
+      - run: dart compile exe bin/flukki.dart -o ${{ matrix.runs-on }}/${{ matrix.binary-name }}
       - uses: actions/upload-artifact@v3
         with:
           name: bin-${{ matrix.runs-on }}
-          path: ./kodder/${{ matrix.runs-on }}/${{ matrix.binary-name }}
+          path: ./${{ matrix.runs-on }}/${{ matrix.binary-name }}
 
   release:
     needs: compile
