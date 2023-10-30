@@ -1,0 +1,5 @@
+architektura aplikacji:
+Tworzymy aplikację do zarządzania pracownikami, główne funkcje: mierzenie czasy pracy, składanie wniosków urlopowych (time off requests), zgłoszenia, zadania i projekty.
+1. warstwa prezentacji -> warstwa z UI użytkownika. Odpowiada za komunikację z użytkownikiem
+2. warstwa kontrolerów -> warstwa, która jest odpowiedzialna na zarządzanie stanem (getx) oraz logikę biznesową, to z nią komunikuje się warstwa prezentacji. Ta warstwa operuje modelami w katalogach models
+3. warstwa dao -> warstwa, która jest odpowiedzialna za wywołania API lub bazy danych, to z nią komunikuje się warstwa kontrolerów
