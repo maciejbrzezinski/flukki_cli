@@ -41,7 +41,8 @@ Future<void> main(List<String> arguments) async {
       .map((e) => e.path)
       .toList();
 
-  final dartSdk = Platform.resolvedExecutable;
+  final dartSdk = Platform.resolvedExecutable
+      .substring(0, Platform.resolvedExecutable.indexOf('/bin/dart'));
 
   final session = AnalysisContextCollection(
     includedPaths: filesInProjectDir,
