@@ -6,8 +6,8 @@ class AnalyzeController {
   Dio get dio {
     final dio = Dio();
     dio.options = BaseOptions(
-      baseUrl: 'http://localhost:8080',
-      // baseUrl: 'https://kodder-57n4nltafa-lm.a.run.app',
+      // baseUrl: 'http://localhost:8080',
+      baseUrl: 'https://flukki-57n4nltafa-lm.a.run.app',
       headers: {'Content-Type': 'application/json'},
     );
     return dio;
