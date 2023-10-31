@@ -185,8 +185,10 @@ Future<void> main(List<String> arguments) async {
           continue;
         }
         final newSession = AnalysisContextCollection(
-            includedPaths: [filePath],
-            resourceProvider: PhysicalResourceProvider.INSTANCE);
+          includedPaths: [filePath],
+          resourceProvider: PhysicalResourceProvider.INSTANCE,
+          sdkPath: dartSdkPath,
+        );
         final currentBody = newSession.contexts.first.currentSession
             .getParsedUnit(filePath) as ParsedUnitResult;
 
