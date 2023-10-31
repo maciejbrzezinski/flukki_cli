@@ -41,15 +41,16 @@ Future<void> main(List<String> arguments) async {
       .map((e) => e.path)
       .toList();
 
-  print('Resolved: ${Platform.resolvedExecutable}');
-  print('Executable: ${Platform.executable}');
-  final dartSdk = Platform.resolvedExecutable
-      .substring(0, Platform.resolvedExecutable.indexOf('/bin/dart'));
+  final dartSdkPath = Platform.environment['DART_SDK'];
+  if (dartSdkPath == null) {
+    print('DART_SDK not found in environment variables');
+    exit(69);
+  }
 
   final session = AnalysisContextCollection(
     includedPaths: filesInProjectDir,
     resourceProvider: PhysicalResourceProvider.INSTANCE,
-    sdkPath: dartSdk,
+    sdkPath: dartSdkPath,
   );
   List<FileLowLevelData> filesLowLevelData = [];
   for (final file in filesInProjectDir) {
